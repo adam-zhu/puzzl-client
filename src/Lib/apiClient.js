@@ -8,6 +8,14 @@ const getSnacks = async () => {
   return data;
 };
 
+const getOrders = async () => {
+  const endpoint = `${REACT_APP_API_ENDPOINT}/orders`;
+  const result = await fetch(endpoint);
+  const data = await result.json();
+
+  return data;
+};
+
 const createPaymentIntent = async (items) => {
   const endpoint = `${REACT_APP_API_ENDPOINT}/create-payment-intent`;
   const result = await fetch(endpoint, {
@@ -22,6 +30,6 @@ const createPaymentIntent = async (items) => {
   return data;
 };
 
-const apiClient = { getSnacks, createPaymentIntent };
+const apiClient = { getSnacks, getOrders, createPaymentIntent };
 
 export default apiClient;

@@ -31,8 +31,6 @@ const App = ({ user }) => {
               domain={REACT_APP_AUTH0_DOMAIN}
               clientId={REACT_APP_AUTH0_CLIENTID}
               redirectUri={window.location.origin}
-              audience={`https://${REACT_APP_AUTH0_DOMAIN}/api/v2/`}
-              scope='read:current_user update:current_user_metadata'
             >
               <Auth0Initializer />
             </Auth0Provider>
@@ -63,9 +61,9 @@ const ReducerDefinitionGate = React.memo(({ children }) => {
 });
 
 const Auth0Initializer = () => {
-  const { isPageLoading, error } = useAuth0();
+  const { isLoading, error } = useAuth0();
 
-  if (isPageLoading) {
+  if (isLoading) {
     return <PageLoading />;
   }
 
@@ -81,16 +79,12 @@ const Auth0Handler = () => {
   const dispatch = useContext(DispatchContext);
 
   useEffect(() => {
-    if (!isAuthenticated) {
-      loginWithRedirect();
-    }
-  }, [isAuthenticated, loginWithRedirect]);
-
-  useEffect(() => {
     if (user) {
       dispatch({ type: USER_LOGIN_SUCCESS, payload: user });
+    } else if (isAuthenticated === false) {
+      loginWithRedirect();
     }
-  }, [user, dispatch]);
+  }, [isAuthenticated, loginWithRedirect, user, dispatch]);
 
   if (isAuthenticated) {
     return <AppContent logoutHandler={logout} />;
