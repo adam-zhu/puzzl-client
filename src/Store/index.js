@@ -6,6 +6,7 @@ export const initialState = {
   snacks: undefined,
   cart: [],
   orders: undefined,
+  confirmed: undefined,
 };
 
 export const USER_LOGIN_SUCCESS = 'USER_LOGIN_SUCCESS';
@@ -15,6 +16,7 @@ export const SNACKS_DATA_LOADED = 'SNACKS_DATA_LOADED';
 export const ORDERS_DATA_LOADED = 'ORDERS_DATA_LOADED';
 export const ITEM_ADDED = 'ITEM_ADDED';
 export const ITEM_REMOVED = 'ITEM_REMOVED';
+export const ORDER_CONFIRMED = 'ORDER_CONFIRMED';
 
 const reducer = (state = initialState, action) => {
   switch (action.type) {
@@ -52,12 +54,20 @@ const reducer = (state = initialState, action) => {
       return {
         ...state,
         cart: [...state.cart, action.payload],
+        confirmed: undefined,
       };
 
     case ITEM_REMOVED:
       return {
         ...state,
         cart: state.cart.filter((_, i) => i !== action.payload),
+      };
+
+    case ORDER_CONFIRMED:
+      return {
+        ...state,
+        cart: [],
+        confirmed: action.payload,
       };
 
     default:
